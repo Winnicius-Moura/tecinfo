@@ -114,10 +114,11 @@ O ícone dentro do link é pequeno e quadrado: `1.1rem` de largura e `1.1rem` de
 - [ ] A tag raiz do conteúdo é `<article>` e todos os elementos filhos estão na ordem especificada.
 - [ ] O `<h3>` contém o nome de usuário real do aluno.
 - [ ] A tag `<p>` está presente (com ou sem conteúdo).
-- [ ] Os dois `<h4>` contêm os textos exatos `Programming languages I use` e `Social Links`.
+- [ ] Os dois `<h4>` contêm os textos **exatos** `Programming languages I use` e `Social Links`.
+- [ ] Containers usam a tag `<section>` — `<section class="container">` e `<section class="social-container">`.
 - [ ] A `<section class="container">` contém entre 1 e 2 `<div class="badge">` com `background-color` e `color` definidos via `style` inline.
-- [ ] A `<section class="social-container">` contém entre 1 e 2 `<a class="social-link">` com `href` real, `target="_blank"` e `<img class="social-icon">` com o CDN do Devicons.
-- [ ] A tag `<style>` está posicionada após o `</article>` e contém todos os seletores e propriedades da tabela de estilos acima.
+- [ ] A `<section class="social-container">` contém entre 1 e 2 `<a class="social-link">` com `href` real (`https://`), `target="_blank"` e `<img class="social-icon">`.
+- [ ] A tag `<style>` está posicionada **após** o `</article>` e contém: `article`, `.badge`, `.container`, `.social-link` e `.social-icon` como seletores declarados.
 - [ ] O resultado visual no navegador corresponde ao design de referência.
 
 ---
