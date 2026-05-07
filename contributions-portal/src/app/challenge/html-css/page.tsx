@@ -446,6 +446,18 @@ export default function HtmlCssChallengePage() {
                     <button
                       onClick={() => {
                         setCode(s.htmlContent)
+                        setReport(
+                          s.percentage != null && s.approved != null
+                            ? {
+                                score: Math.round(s.percentage),
+                                max_score: 100,
+                                percentage: s.percentage,
+                                approved: s.approved,
+                                passed_checks: [],
+                                failed_checks: [],
+                              }
+                            : null,
+                        )
                         setActiveTab('editor')
                       }}
                       className="btn btn-outline btn-xs font-mono"
