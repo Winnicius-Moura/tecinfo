@@ -95,7 +95,7 @@ export default function HtmlCssChallengePage() {
 
       mutate()
       setActiveTab('editor')
-      setCooldown(60)
+      setCooldown(30)
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro ao enviar. Tente novamente.')
     } finally {
@@ -387,9 +387,10 @@ export default function HtmlCssChallengePage() {
                   onClick={() => {
                     setReport(null)
                     setError(null)
+                    setCode(STARTER_CODE)
                   }}
                   className="btn btn-ghost btn-outline font-mono"
-                  title="Limpar resultado"
+                  title="Limpar resultado e reiniciar código"
                 >
                   ↺ Reset
                 </button>
@@ -455,7 +456,7 @@ export default function HtmlCssChallengePage() {
                             className={`badge badge-sm font-mono ${s.approved ? 'badge-success' : 'badge-error'
                               }`}
                           >
-                            {s.approved ? '✓ Aprovado' : '✗ Reprovado'}
+                            {s.approved ? '✓ Approved' : '✗ Denied'}
                           </span>
                           {s.percentage != null && (
                             <span className="font-mono text-sm text-base-content/60">
