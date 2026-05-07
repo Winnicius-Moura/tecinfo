@@ -1,0 +1,156 @@
+/* ========== RESET BÁSICO ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  padding: 30px;  
+}
+
+/* ========== GRADE DE CARDS ========== */
+/* .grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+} */
+
+/* Style do header */
+header {
+  background-color: #ffffff;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 30px;
+  border-radius: 16px;
+}
+
+header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+ul {
+  list-style: none;
+  gap: 20px;
+}
+
+
+a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+
+
+
+
+.grade {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.card {
+  flex: 1 1 calc(33.333% - 20px);
+}
+
+/* ========== CARD ========== */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.card-corpo {
+  padding: 12px;
+}
+
+.card-corpo h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.card-corpo p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+/* ========== BOTÃO ========== */
+.btn {
+  background-color: #8b0000;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #a00000;
+}
+
+/* ========== FUNDO ESCURO DO MODAL ========== */
+.fundo-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.fundo-modal.ativo {
+  display: block;
+}
+
+/* ========== MODAL ========== */
+.modal {
+  background-color: #ffffff;
+  width: 340px;
+  padding: 24px;
+  border-radius: 4px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #444;
+}
+
+/* ========== BOTÃO FECHAR ========== */
+.fechar {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  float: right;
+  color: #333;
+}

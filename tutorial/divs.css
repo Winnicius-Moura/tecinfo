@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+}
+
+.pai {}
+
+.filha1, .filha2 {
+  width: 300px;
+  height: 300px;
+  background-color: blue;
+  position: static;
+  margin: 10px;
+}
+
+.filha1 {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+}
+
+.filha2 {
+  background-color: red;
+  float: left;
+}
+

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receitas</title>
+  <link rel="stylesheet" href="receitas.css">
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <img src="logo.png" alt="" width="117" height="72">
+      <ul style="display: flex;">
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Receitas</a></li>
+        <li><a href="#">Quem Somos</a></li>
+        <li><a href="#">Comunidade</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div style="position: relative; display: inline-block; width: 100%;">
+    <img style="width: 100%; height: 168px; display: block; object-fit: cover;"
+      src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2FsbHBhcGVyJTIwNGslMjBmb29kfGVufDB8fDB8fHww"
+      alt="">
+    <p
+      style="font-size:31px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; color: white; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); margin: 0; text-align: center;">
+      Reaproveite melhor os alimentos!</p>
+  </div>
+
+  <!-- GRADE DE CARDS -->
+  <div class="grade">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300" alt="Tigela de abacate"
+        style="cursor: pointer;" onclick="window.location.href='receita-detalhe.html'">
+      <div class="card-corpo">
+        <h3>Tigela de abacate</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Tigela de abacate', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: abacate, frutas vermelhas, granola e mel.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+    <div class="card" onclick="window.location.href='receita-detalhe.html'">
+      <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300" alt="Salada de kiwi">
+      <div class="card-corpo">
+        <h3>Salada de kiwi</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Salada de kiwi', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: kiwi, laranja, hortelã e limão.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300" alt="Mix de vegetais">
+      <div class="card-corpo">
+        <h3>Mix de vegetais</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Mix de vegetais', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: cenoura, beterraba, espinafre e azeite.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=300" alt="Pimentões à Juliana">
+      <div class="card-corpo">
+        <h3>Pimentões à Juliana</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Pimentões à Juliana', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: pimentões coloridos, azeite, alho e sal.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300" alt="Prato oriental">
+      <div class="card-corpo">
+        <h3>Prato oriental</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Prato oriental', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: arroz, legumes salteados, shoyu e gergelim.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1432139509613-5c4255815697?w=300" alt="Beterrabas assadas">
+      <div class="card-corpo">
+        <h3>Beterrabas assadas</h3>
+        <p>Receita refrescante e cheia de vitaminas para seu café da manhã.</p>
+        <button class="btn"
+          onclick="abrirModal('Beterrabas assadas', 'Receita refrescante e cheia de vitaminas para seu café da manhã. Ingredientes: beterraba, azeite, alecrim e sal grosso.')">Ver
+          receita</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="fundo-modal" id="fundo-modal">
+    <div class="modal">
+      <button class="fechar" onclick="fecharModal()">X</button>
+      <h2 id="modal-titulo">Título</h2>
+      <p id="modal-texto">Texto receita</p>
+    </div>
+  </div>
+
+  <script src="receitas.js"></script>
+</body>
+
+</html>
