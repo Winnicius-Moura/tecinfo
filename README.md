@@ -1,6 +1,7 @@
 # 🖥️ TecInfo — Open Source Learning Project
 
-> Repositório oficial do curso **TecInfo 2025–2026**.  Disciplinas Fundamentos de Criação de Sites
+> Repositório FCS **TecInfo 2025–2026**.  
+> Fundamentos de Criação de Sites (FCS - HTML CSS)
 > Aprenda na prática como funciona o Open Source.
 
 ---
