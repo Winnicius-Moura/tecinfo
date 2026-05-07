@@ -1,7 +1,7 @@
 # 🖥️ TecInfo — Open Source Learning Project
 
-> Repositório oficial do curso **TecInfo 2025–2026**.  
-> Aprenda na prática como funciona o mundo do desenvolvimento de software colaborativo.
+> Repositório oficial do curso **TecInfo 2025–2026**.  Disciplinas Fundamentos de Criação de Sites
+> Aprenda na prática como funciona o Open Source.
 
 ---
 
@@ -25,14 +25,14 @@ Aqui você vai aprender a:
 
 ```
 tecinfo/
-├── contributions-analysis/   # Back-end de análise de exercícios (estilo HackerRank)
+├── contributions-analysis/   # Back-end de análise de exercícios (Building...)
 ├── galery/                   # Cards pessoais criados pelos alunos após o fork
 ├── tutorial/                 # Códigos produzidos em sala de aula
 └── documentation/            # Documentação geral do projeto
 ```
 
 ### `contributions-analysis`
-Back-end em **Go** responsável por receber, processar e avaliar as contribuições dos alunos. Funciona de forma similar ao HackerRank — os exercícios são submetidos e analisados automaticamente.
+Back-end em **Go** responsável por receber, processar e avaliar as contribuições dos alunos.
 
 **Tecnologias:** Go · Gin · PostgreSQL · Docker
 
@@ -81,7 +81,6 @@ Vá até o repositório original e clique em **New Pull Request**. Descreva o qu
 - Siga o padrão de **Conventional Commits** nas mensagens (`feat:`, `fix:`, `docs:`, etc.)
 - Não altere arquivos fora do escopo da sua tarefa
 - Pull Requests sem descrição **não serão aceitos**
-- Respeite o código e as contribuições dos colegas
 
 ---
 
@@ -107,16 +106,6 @@ cd contributions-analysis
 docker-compose up -d
 make run
 ```
-
----
-
-## 🤝 Contribuidores
-
-<a href="https://github.com/Winnicius-Moura/tecinfo/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Winnicius-Moura/tecinfo" />
-</a>
-
----
 
 <p align="center">
   Feito com dedicação para o curso <strong>TecInfo 2025–2026</strong> 🚀
