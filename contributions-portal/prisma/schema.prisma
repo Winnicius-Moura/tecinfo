@@ -17,6 +17,7 @@ model Submission {
   htmlContent      String
   percentage       Float?
   approved         Boolean?
+  reportJson       String?
   createdAt        DateTime @default(now())
 
   @@index([contributorId])

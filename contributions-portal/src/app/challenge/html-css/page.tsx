@@ -52,15 +52,22 @@ export default function HtmlCssChallengePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'ticket' | 'editor' | 'history'>('ticket')
+  const [cooldown, setCooldown] = useState(0)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  useEffect(() => {
+    if (cooldown <= 0) return
+    const timer = setTimeout(() => setCooldown((c) => c - 1), 1000)
+    return () => clearTimeout(timer)
+  }, [cooldown])
+
   const handleChange = useCallback((value: string) => setCode(value), [])
 
   async function handleSubmit() {
-    if (!contributor) return
+    if (!contributor || cooldown > 0) return
     setLoading(true)
     setError(null)
     setReport(null)
@@ -82,11 +89,13 @@ export default function HtmlCssChallengePage() {
           htmlContent: code,
           percentage: result.percentage,
           approved: result.approved,
+          reportJson: JSON.stringify(result),
         }),
       })
 
       mutate()
       setActiveTab('editor')
+      setCooldown(60)
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro ao enviar. Tente novamente.')
     } finally {
@@ -356,20 +365,36 @@ export default function HtmlCssChallengePage() {
               </div>
             )}
 
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="btn btn-primary w-full font-mono"
-            >
-              {loading ? (
-                <>
-                  <span className="loading loading-spinner loading-sm" />
-                  Analisando...
-                </>
-              ) : (
-                '🚀 Enviar para análise'
+            <div className="flex gap-2">
+              <button
+                onClick={handleSubmit}
+                disabled={loading || cooldown > 0}
+                className="btn btn-primary flex-1 font-mono"
+              >
+                {loading ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm" />
+                    Analisando...
+                  </>
+                ) : cooldown > 0 ? (
+                  `⏳ Aguarde ${cooldown}s`
+                ) : (
+                  '🚀 Enviar para análise'
+                )}
+              </button>
+              {report && (
+                <button
+                  onClick={() => {
+                    setReport(null)
+                    setError(null)
+                  }}
+                  className="btn btn-ghost btn-outline font-mono"
+                  title="Limpar resultado"
+                >
+                  ↺ Reset
+                </button>
               )}
-            </button>
+            </div>
           </div>
 
           {/* Result */}
@@ -447,8 +472,10 @@ export default function HtmlCssChallengePage() {
                       onClick={() => {
                         setCode(s.htmlContent)
                         setReport(
-                          s.percentage != null && s.approved != null
-                            ? {
+                          s.reportJson
+                            ? (JSON.parse(s.reportJson) as HtmlCssAnalysisReport)
+                            : s.percentage != null && s.approved != null
+                              ? {
                                 score: Math.round(s.percentage),
                                 max_score: 100,
                                 percentage: s.percentage,
@@ -456,7 +483,7 @@ export default function HtmlCssChallengePage() {
                                 passed_checks: [],
                                 failed_checks: [],
                               }
-                            : null,
+                              : null,
                         )
                         setActiveTab('editor')
                       }}

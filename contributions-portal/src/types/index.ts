@@ -64,6 +64,7 @@ export interface LocalSubmission {
   htmlContent: string
   percentage: number | null
   approved: boolean | null
+  reportJson: string | null
   createdAt: string
 }
 

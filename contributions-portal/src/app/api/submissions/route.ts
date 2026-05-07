@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
       htmlContent: true,
       percentage: true,
       approved: true,
+      reportJson: true,
       createdAt: true,
     },
   })
@@ -29,7 +30,7 @@ export async function GET(req: NextRequest) {
 // POST /api/submissions
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { contributorId, analysisResultId, htmlContent, percentage, approved } = body
+  const { contributorId, analysisResultId, htmlContent, percentage, approved, reportJson } = body
 
   if (!contributorId || !htmlContent) {
     return NextResponse.json(
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
   }
 
   const submission = await prisma.submission.create({
-    data: { contributorId, analysisResultId, htmlContent, percentage, approved },
+    data: { contributorId, analysisResultId, htmlContent, percentage, approved, reportJson },
   })
 
   return NextResponse.json(submission, { status: 201 })
