@@ -3,10 +3,16 @@
 import { useAuthStore } from '@/store/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export function Navbar() {
   const { contributor, clearContributor, isAuthenticated } = useAuthStore()
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   function handleLogout() {
     clearContributor()
@@ -34,7 +40,10 @@ export function Navbar() {
       </div>
 
       <div className="navbar-end gap-2">
-        {isAuthenticated() ? (
+        {/* Aguarda hidratação para evitar mismatch SSR/client com Zustand persist */}
+        {!mounted ? (
+          <div className="w-24 h-8 bg-base-300 rounded animate-pulse" />
+        ) : isAuthenticated() ? (
           <>
             <div className="flex items-center gap-2">
               <div className="avatar placeholder">

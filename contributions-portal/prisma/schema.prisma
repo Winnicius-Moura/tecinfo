@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("SUBMISSIONS_DATABASE_URL")
+}
+
+/// Armazena os códigos HTML/CSS enviados pelos alunos.
+/// Referencia o banco Go via contributorId e analysisResultId,
+/// mas não depende dele para funcionar.
+model Submission {
+  id               String   @id @default(cuid())
+  contributorId    String
+  analysisResultId String?
+  htmlContent      String
+  percentage       Float?
+  approved         Boolean?
+  createdAt        DateTime @default(now())
+
+  @@index([contributorId])
+}

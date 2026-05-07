@@ -55,7 +55,19 @@ export interface HtmlCssSubmitPayload {
   html_content: string
 }
 
-// ─── API Envelope ─────────────────────────────────────────────────────────────
+// ─── Local Submission (Prisma DB) ────────────────────────────────────────────
+
+export interface LocalSubmission {
+  id: string
+  contributorId: string
+  analysisResultId: string | null
+  htmlContent: string
+  percentage: number | null
+  approved: boolean | null
+  createdAt: string
+}
+
+
 
 export interface ApiResponse<T> {
   status: number

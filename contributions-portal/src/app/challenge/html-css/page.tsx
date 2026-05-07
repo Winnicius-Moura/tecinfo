@@ -8,7 +8,7 @@ import type { HtmlCssAnalysisReport } from '@/types'
 import { html } from '@codemirror/lang-html'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const CodeMirror = dynamic(() => import('@uiw/react-codemirror'), { ssr: false })
 
@@ -46,11 +46,16 @@ export default function HtmlCssChallengePage() {
   const { contributor, isAuthenticated } = useAuthStore()
   const { data: submissions, mutate } = useSubmissions(contributor?.id)
 
+  const [mounted, setMounted] = useState(false)
   const [code, setCode] = useState(STARTER_CODE)
   const [report, setReport] = useState<HtmlCssAnalysisReport | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'ticket' | 'editor' | 'history'>('ticket')
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleChange = useCallback((value: string) => setCode(value), [])
 
@@ -61,11 +66,25 @@ export default function HtmlCssChallengePage() {
     setReport(null)
 
     try {
+      // 1. Envia para o Go backend → análise
       const result = await htmlCssApi.submit({
         contributor_id: contributor.id,
         html_content: code,
       })
       setReport(result)
+
+      // 2. Persiste o código no banco local (Prisma/SQLite) com referência ao Go
+      await fetch('/api/submissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contributorId: contributor.id,
+          htmlContent: code,
+          percentage: result.percentage,
+          approved: result.approved,
+        }),
+      })
+
       mutate()
       setActiveTab('editor')
     } catch (err) {
@@ -73,6 +92,14 @@ export default function HtmlCssChallengePage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (!mounted) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+        <span className="loading loading-spinner loading-lg text-primary" />
+      </div>
+    )
   }
 
   if (!isAuthenticated()) {
@@ -394,20 +421,34 @@ export default function HtmlCssChallengePage() {
                 <div key={s.id} className="card bg-base-200 border border-base-300">
                   <div className="card-body p-4 flex-row items-center justify-between flex-wrap gap-2">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-base-content/40 text-sm">#{submissions.length - i}</span>
+                      <span className="font-mono text-base-content/40 text-sm">
+                        #{submissions.length - i}
+                      </span>
                       <div>
-                        <p className="font-mono text-sm">{s.id}</p>
-                        <p className="text-xs text-base-content/40 font-mono">
-                          {new Date(s.created_at).toLocaleString('pt-BR')}
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`badge badge-sm font-mono ${s.approved ? 'badge-success' : 'badge-error'
+                              }`}
+                          >
+                            {s.approved ? '✓ Aprovado' : '✗ Reprovado'}
+                          </span>
+                          {s.percentage != null && (
+                            <span className="font-mono text-sm text-base-content/60">
+                              {Math.round(s.percentage)}%
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-base-content/40 font-mono mt-0.5">
+                          {new Date(s.createdAt).toLocaleString('pt-BR')}
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => {
-                        setCode(s.html_content)
+                        setCode(s.htmlContent)
                         setActiveTab('editor')
                       }}
-                      className="btn btn-ghost btn-xs font-mono"
+                      className="btn btn-outline btn-xs font-mono"
                     >
                       Carregar código
                     </button>
