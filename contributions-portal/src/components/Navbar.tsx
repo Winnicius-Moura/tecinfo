@@ -47,7 +47,7 @@ export function Navbar() {
           <>
             <div className="flex items-center gap-2">
               <div className="avatar placeholder">
-                <div className="bg-primary text-primary-content rounded-full w-8">
+                <div className="bg-primary text-primary-content rounded-full w-8 h-8 flex items-center justify-center">
                   <span className="text-xs font-bold">
                     {contributor?.full_name?.[0]?.toUpperCase() ?? '?'}
                   </span>
