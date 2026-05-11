@@ -37,3 +37,17 @@ func (s *HtmlCssSubmissionService) ByContributor(ctx context.Context, contributo
 	var results []*objects.HtmlCssSubmission
 	return results, s.client.db.Where("contributor_id = ?", contributorID).Order("created_at desc").Find(&results).Error
 }
+
+func (s *HtmlCssSubmissionService) GallerySubmissions(ctx context.Context, limit int) ([]*objects.GalleryCard, error) {
+	var results []*objects.GalleryCard
+	query := `
+		SELECT s.contributor_id, s.html_content, s.created_at as approved_at, r.score as percentage
+		FROM html_css_submissions s
+		JOIN analysis_results r ON s.analysis_result_id = r.id
+		WHERE r.status = 'approved'
+		ORDER BY s.created_at DESC
+		LIMIT ?
+	`
+	err := s.client.db.Raw(query, limit).Scan(&results).Error
+	return results, err
+}

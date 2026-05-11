@@ -44,7 +44,7 @@ const STARTER_CODE = `<article>
 
 export default function HtmlCssChallengePage() {
   const { contributor, isAuthenticated } = useAuthStore()
-  const { data: submissions, mutate } = useSubmissions(contributor?.id)
+  const { data: submissions, mutate, error: fetchError } = useSubmissions(contributor?.id)
 
   const [mounted, setMounted] = useState(false)
   const [code, setCode] = useState(STARTER_CODE)
@@ -81,7 +81,7 @@ export default function HtmlCssChallengePage() {
       setReport(result)
 
       // 2. Persiste o código no banco local (Prisma/SQLite) com referência ao Go
-      await fetch('/api/submissions', {
+      const res = await fetch('/api/submissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -92,6 +92,11 @@ export default function HtmlCssChallengePage() {
           reportJson: JSON.stringify(result),
         }),
       })
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.error || 'Falha ao salvar no banco local')
+      }
 
       mutate()
       setActiveTab('editor')
@@ -428,9 +433,19 @@ export default function HtmlCssChallengePage() {
         <div className="space-y-4">
           <h2 className="font-bold font-mono">Suas submissões anteriores</h2>
 
-          {!submissions && (
+          {(!submissions && !fetchError) && (
             <div className="flex justify-center py-12">
               <span className="loading loading-dots loading-lg text-primary" />
+            </div>
+          )}
+
+          {fetchError && (
+            <div className="flex flex-col items-center justify-center py-16 text-base-content/30 gap-3">
+              <span className="text-5xl">⚠️</span>
+              <p className="font-mono text-sm text-center">
+                Erro ao carregar o histórico de submissões.<br />
+                Verifique se o banco de dados está online.
+              </p>
             </div>
           )}
 

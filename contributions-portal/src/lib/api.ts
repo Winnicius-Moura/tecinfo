@@ -21,8 +21,17 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json', ...(init?.headers as Record<string, string>) }
+  
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token')
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...init?.headers },
+    headers,
     ...init,
   })
 
@@ -46,8 +55,13 @@ export const contributorApi = {
 
   login: (payload: ContributorLoginPayload) =>
     request<Contributor>('/contributor/login', {
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify(payload),
+    }),
+
+  me: () =>
+    request<Contributor>('/user/me', {
+      method: 'GET',
     }),
 }
 

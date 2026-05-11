@@ -10,6 +10,15 @@ type HtmlCssSubmissionService interface {
 	Create(ctx context.Context, data *HtmlCssSubmission) error
 	Submission(ctx context.Context, id string) (*HtmlCssSubmission, error)
 	ByContributor(ctx context.Context, contributorID string) ([]*HtmlCssSubmission, error)
+	GallerySubmissions(ctx context.Context, limit int) ([]*GalleryCard, error)
+}
+
+// GalleryCard represents a summary of an approved submission for the gallery
+type GalleryCard struct {
+	ContributorID string    `json:"contributor_id"`
+	HtmlContent   string    `json:"html_content"`
+	ApprovedAt    time.Time `json:"approved_at"`
+	Percentage    float64   `json:"percentage"`
 }
 
 // HtmlCssSubmission stores the raw HTML/CSS code submitted by a contributor
@@ -46,6 +55,7 @@ type HtmlCssAnalysisReport struct {
 	MaxScore     float64       `json:"max_score"`
 	Percentage   float64       `json:"percentage"`
 	Approved     bool          `json:"approved"`
+	PRToken      string        `json:"pr_token,omitempty"`
 	PassedChecks []CheckResult `json:"passed_checks"`
 	FailedChecks []CheckResult `json:"failed_checks"`
 }

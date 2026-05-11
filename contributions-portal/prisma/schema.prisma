@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("SUBMISSIONS_DATABASE_URL")
 }
 
@@ -11,7 +11,7 @@ datasource db {
 /// Referencia o banco Go via contributorId e analysisResultId,
 /// mas não depende dele para funcionar.
 model Submission {
-  id               String   @id @default(cuid())
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
   contributorId    String
   analysisResultId String?
   htmlContent      String

@@ -15,11 +15,14 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/wnn-dev/contributions-analysis/config"
 	"github.com/wnn-dev/contributions-analysis/database/postgres"
+	"github.com/wnn-dev/contributions-analysis/email"
 	analysisHandler "github.com/wnn-dev/contributions-analysis/handlers/analysis"
 	contributionHandler "github.com/wnn-dev/contributions-analysis/handlers/contribution"
 	contributorHandler "github.com/wnn-dev/contributions-analysis/handlers/contributor"
 	htmlcssHandler "github.com/wnn-dev/contributions-analysis/handlers/htmlcss"
 	jsonServer "github.com/wnn-dev/contributions-analysis/server/json"
+	"github.com/wnn-dev/contributions-analysis/server/middleware"
+	"github.com/wnn-dev/contributions-analysis/rabbitmq"
 )
 
 func main() {
@@ -51,17 +54,40 @@ func main() {
 	database := postgres.New(initContext, *configuration)
 	defer database.Close()
 
+	emailService := email.NewService(email.Config{
+		Host:     configuration.SMTP.Host,
+		Port:     configuration.SMTP.Port,
+		Username: configuration.SMTP.Username,
+		Password: configuration.SMTP.Password,
+	})
+
 	// Services
 	contributorService := postgres.NewContributorService(initContext, database)
 	contributionService := postgres.NewContributionService(initContext, database)
 	analysisResultService := postgres.NewAnalysisResultService(initContext, database)
 	htmlCssSubmissionService := postgres.NewHtmlCssSubmissionService(initContext, database)
+	prTokenService := postgres.NewPrTokenService(initContext, database)
+
+	// RabbitMQ
+	var publisher *rabbitmq.Publisher
+	amqpURL := os.Getenv("RABBITMQ_URL")
+	if amqpURL == "" {
+		amqpURL = "amqp://guest:guest@localhost:5672/"
+	}
+	pub, err := rabbitmq.NewPublisher(amqpURL)
+	if err != nil {
+		log.Printf("Warning: Failed to connect to RabbitMQ: %v. Real-time gallery will be disabled.", err)
+	} else {
+		publisher = pub
+		defer publisher.Close()
+		log.Println("Successfully connected to RabbitMQ")
+	}
 
 	// Handlers
-	contribHandler := contributorHandler.NewHandler(contributorService, contributionService)
+	contribHandler := contributorHandler.NewHandler(contributorService, contributionService, emailService, configuration.JWT.Secret)
 	contribtnHandler := contributionHandler.NewHandler(contributionService)
 	analysisHandler := analysisHandler.NewHandler(analysisResultService)
-	htmlCssHandler := htmlcssHandler.NewHandler(htmlCssSubmissionService, analysisResultService)
+	htmlCssHandler := htmlcssHandler.NewHandler(htmlCssSubmissionService, analysisResultService, prTokenService, publisher)
 
 	// JSON Servers
 	contributorJsonServer := jsonServer.NewContributorServer(contribHandler)
@@ -82,7 +108,7 @@ func main() {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	setUpRoutes(router, contributorJsonServer, contributionJsonServer, analysisJsonServer, htmlCssJsonServer)
+	setUpRoutes(router, configuration.JWT.Secret, contributorJsonServer, contributionJsonServer, analysisJsonServer, htmlCssJsonServer)
 
 	srv := &http.Server{
 		Addr:    configuration.Address,
@@ -116,6 +142,7 @@ func main() {
 
 func setUpRoutes(
 	router *gin.Engine,
+	jwtSecret string,
 	contributorJsonServer *jsonServer.ContributorJsonServer,
 	contributionJsonServer *jsonServer.ContributionJsonServer,
 	analysisJsonServer *jsonServer.AnalysisJsonServer,
@@ -127,9 +154,15 @@ func setUpRoutes(
 	{
 		// Contributor routes
 		api.POST("/contributor/register", contributorJsonServer.SignUp())
-		api.PUT("/contributor/login", contributorJsonServer.Login())
-		api.GET("/contributor", contributorJsonServer.GetContributor())
-		api.GET("/contributors", contributorJsonServer.GetContributors())
+		api.POST("/contributor/login", contributorJsonServer.Login())
+		
+		auth := api.Group("/")
+		auth.Use(middleware.AuthMiddleware(jwtSecret))
+		{
+			auth.GET("/user/me", contributorJsonServer.Me())
+			auth.GET("/contributor", contributorJsonServer.GetContributor())
+			auth.GET("/contributors", contributorJsonServer.GetContributors())
+		}
 
 		// Contribution routes
 		api.POST("/contribution/create", contributionJsonServer.CreateContribution())
@@ -147,5 +180,8 @@ func setUpRoutes(
 		// HTML/CSS test routes
 		api.POST("/test/html-css/submit", htmlCssJsonServer.Submit())
 		api.GET("/test/html-css/submissions", htmlCssJsonServer.GetSubmissionsByContributor())
+		api.POST("/test/html-css/validate-pr-token", htmlCssJsonServer.ValidatePRToken())
+		api.GET("/test/html-css/pr-tokens", htmlCssJsonServer.GetPrTokensByContributor())
+		api.GET("/test/html-css/gallery", htmlCssJsonServer.GetGallery())
 	}
 }

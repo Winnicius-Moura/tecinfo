@@ -14,5 +14,27 @@ services:
     volumes:
       - contributions_pg_data:/var/lib/postgresql/data
 
+  mongodb:
+    image: mongo:latest
+    container_name: contributions-portal-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    volumes:
+      - contributions_mongo_data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: contributions-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - contributions_rabbitmq_data:/var/lib/rabbitmq
+
 volumes:
   contributions_pg_data:
+  contributions_mongo_data:
+  contributions_rabbitmq_data:

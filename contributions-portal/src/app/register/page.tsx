@@ -1,28 +1,30 @@
 'use client'
 
 import { ApiError, contributorApi } from '@/lib/api'
-import { useAuthStore } from '@/store/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const setContributor = useAuthStore((s) => s.setContributor)
 
-  const [form, setForm] = useState({ full_name: '', email: '', password: '' })
+  const [form, setForm] = useState({ full_name: '', email: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setSuccess(false)
 
     try {
-      const contributor = await contributorApi.register(form)
-      setContributor(contributor)
-      router.push('/challenge/html-css')
+      await contributorApi.register(form)
+      setSuccess(true)
+      setTimeout(() => {
+        router.push('/login')
+      }, 3000)
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Erro inesperado. Tente novamente.')
     } finally {
@@ -44,6 +46,12 @@ export default function RegisterPage() {
           {error && (
             <div role="alert" className="alert alert-error text-sm font-mono">
               <span>✗ {error}</span>
+            </div>
+          )}
+
+          {success && (
+            <div role="alert" className="alert alert-success text-sm font-mono">
+              <span>✓ Conta criada! Sua senha foi enviada para o seu e-mail.</span>
             </div>
           )}
 
@@ -69,19 +77,6 @@ export default function RegisterPage() {
                 className="input input-bordered w-full font-mono"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-            </fieldset>
-
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend font-mono text-xs">Senha</legend>
-              <input
-                type="password"
-                required
-                minLength={6}
-                placeholder="••••••••"
-                className="input input-bordered w-full font-mono"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
               />
             </fieldset>
 

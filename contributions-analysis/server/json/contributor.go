@@ -69,6 +69,24 @@ func (s *ContributorJsonServer) GetContributor() gin.HandlerFunc {
 	}
 }
 
+func (s *ContributorJsonServer) Me() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id, _ := c.Get("userID")
+		if id == "" {
+			responder.JsonResponse(c, false, "unauthorized", nil)
+			return
+		}
+
+		result, err := s.contributor.Contributor(c, id.(string))
+		if err != nil {
+			responder.JsonResponse(c, false, err.Error(), nil)
+			return
+		}
+
+		responder.JsonResponse(c, true, responder.ResourceFetched, result)
+	}
+}
+
 func (s *ContributorJsonServer) GetContributors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		results, err := s.contributor.Contributors(c)

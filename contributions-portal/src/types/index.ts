@@ -5,6 +5,7 @@ export interface Contributor {
   counter: number
   full_name: string
   email: string
+  token?: string
   created_at: string
   updated_at: string
 }
@@ -12,7 +13,6 @@ export interface Contributor {
 export interface ContributorRegistrationPayload {
   full_name: string
   email: string
-  password: string
 }
 
 export interface ContributorLoginPayload {

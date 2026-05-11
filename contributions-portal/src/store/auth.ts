@@ -16,9 +16,19 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       contributor: null,
 
-      setContributor: (contributor) => set({ contributor }),
+      setContributor: (contributor) => {
+        if (contributor.token && typeof window !== 'undefined') {
+          localStorage.setItem('token', contributor.token)
+        }
+        set({ contributor })
+      },
 
-      clearContributor: () => set({ contributor: null }),
+      clearContributor: () => {
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('token')
+        }
+        set({ contributor: null })
+      },
 
       isAuthenticated: () => get().contributor !== null,
     }),

@@ -48,6 +48,7 @@ func (c *Client) autoMigrate() {
 		&objects.Contribution{},
 		&objects.AnalysisResult{},
 		&objects.HtmlCssSubmission{},
+		&objects.PrToken{},
 	)
 	log.Println("Database migration completed")
 }

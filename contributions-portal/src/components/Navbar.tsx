@@ -12,7 +12,17 @@ export function Navbar() {
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+    if (isAuthenticated()) {
+      import('@/lib/api').then(({ contributorApi }) => {
+        contributorApi.me().then((data) => {
+          // Token válido, podemos atualizar os dados se necessário
+        }).catch(() => {
+          // Token inválido ou expirado
+          clearContributor()
+        })
+      })
+    }
+  }, [isAuthenticated, clearContributor])
 
   function handleLogout() {
     clearContributor()

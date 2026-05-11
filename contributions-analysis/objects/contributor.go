@@ -22,6 +22,7 @@ type Contributor struct {
 	FullName      string         `gorm:"column:full_name"                                           json:"full_name,omitempty"`
 	Email         string         `gorm:"column:email;unique_index;not null"                         json:"email"`
 	Password      *password.Hash `gorm:"column:password;type:jsonb not null default '{}'::jsonb"    json:"password,omitempty"`
+	Token         string         `gorm:"-"                                                          json:"token,omitempty"`
 	Contributions []Contribution `gorm:"foreignkey:ContributorID"                                   json:"contributions,omitempty"`
 	CreatedAt     time.Time      `gorm:"column:created_at"                                          json:"created_at,omitempty"`
 	UpdatedAt     time.Time      `gorm:"column:updated_at"                                          json:"updated_at,omitempty"`
@@ -31,7 +32,6 @@ type Contributor struct {
 type ContributorRegistrationVM struct {
 	FullName string `json:"full_name,omitempty"`
 	Email    string `json:"email"`
-	Password string `json:"password"`
 }
 
 type ContributorLoginVM struct {
