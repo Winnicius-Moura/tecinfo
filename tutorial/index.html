@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula: Pseudo-classes, Pseudo-elementos e Layouts</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Navegação SPA -->
+    <nav class="main-nav">
+      <button class="nav-btn active" onclick="showSection('hover')">
+        <span class="nav-icon">🖱️</span>
+        :hover
+      </button>
+      <button class="nav-btn" onclick="showSection('pseudo')">
+        <span class="nav-icon">✨</span>
+        ::before/after
+      </button>
+      <button class="nav-btn" onclick="showSection('nth')">
+        <span class="nav-icon">🎯</span>
+        :nth-child()
+      </button>
+      <button class="nav-btn" onclick="showSection('layouts')">
+        <span class="nav-icon">📐</span>
+        Flex & Grid
+      </button>
+    </nav>
+
+    <!-- Seção 1: :hover -->
+    <section id="hover-section" class="content-section active">
+      <h2 class="section-title">Pseudo-classe :hover</h2>
+      <div class="demo-grid">
+        <!-- Cards Interativos -->
+        <div class="hover-card card-1">
+          <div class="card-content">
+            <h3>Card com Scale</h3>
+            <p>Passe o mouse para ver a transformação</p>
+          </div>
+        </div>
+
+        <div class="hover-card card-2">
+          <div class="card-content">
+            <h3>Card com Overlay</h3>
+            <p>Revela informações extras</p>
+            <span class="hidden-text">Conteúdo secreto! 🎉</span>
+          </div>
+        </div>
+
+        <div class="hover-card card-3">
+          <div class="card-content">
+            <h3>Card com Borda Animada</h3>
+            <p>Bordas que aparecem gradualmente</p>
+          </div>
+        </div>
+
+        <!-- Botões Interativos -->
+        <div class="button-showcase">
+          <button class="btn btn-hover-1">Botão Elevado</button>
+          <button class="btn btn-hover-2">Botão com Sombra</button>
+          <button class="btn btn-hover-3">Botão Preenchido</button>
+          <button class="btn btn-hover-4">Botão com Ícone</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 2: ::before e ::after -->
+    <section id="pseudo-section" class="content-section">
+      <h2 class="section-title">Pseudo-elementos ::before e ::after</h2>
+      <div class="demo-grid">
+        <!-- Citações estilizadas -->
+        <div class="quote-box">
+          <p class="quote-text">Pseudo-elementos permitem adicionar conteúdo decorativo sem poluir o HTML</p>
+          <cite class="quote-author">— Desenvolvedor CSS</cite>
+        </div>
+
+        <!-- Lista com marcadores customizados -->
+        <ul class="custom-list">
+          <li class="list-item">Item com ícone decorativo</li>
+          <li class="list-item">Pseudo-elemento ::before</li>
+          <li class="list-item">Criando marcadores</li>
+          <li class="list-item">Sem elementos extras</li>
+        </ul>
+
+        <!-- Títulos decorados -->
+        <h3 class="decorated-title">Título com Linhas</h3>
+
+        <div class="tooltip-demo">
+          <span class="tooltip-trigger">Passe o mouse aqui</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 3: :nth-child() -->
+    <section id="nth-section" class="content-section">
+      <h2 class="section-title">Seletor :nth-child()</h2>
+      <div class="demo-grid">
+        <!-- Tabela zebrada -->
+        <table class="zebra-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Nota</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Ana Silva</td>
+              <td>9.5</td>
+              <td>Aprovada</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>João Pedro</td>
+              <td>8.7</td>
+              <td>Aprovado</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Maria Costa</td>
+              <td>7.2</td>
+              <td>Aprovada</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Pedro Santos</td>
+              <td>5.9</td>
+              <td>Recuperação</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Lucia Mendes</td>
+              <td>9.1</td>
+              <td>Aprovada</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Grade de itens estilizados -->
+        <div class="nth-grid">
+          <div class="grid-item">1</div>
+          <div class="grid-item">2</div>
+          <div class="grid-item">3</div>
+          <div class="grid-item">4</div>
+          <div class="grid-item">5</div>
+          <div class="grid-item">6</div>
+          <div class="grid-item">7</div>
+          <div class="grid-item">8</div>
+          <div class="grid-item">9</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção 4: Flex e Grid -->
+    <section id="layouts-section" class="content-section">
+      <h2 class="section-title">Flexbox e Grid Layout</h2>
+
+      <h3>Flexbox - Distribuição Flexível</h3>
+      <div class="flex-demo">
+        <div class="flex-item">Flex 1</div>
+        <div class="flex-item">Flex 2</div>
+        <div class="flex-item">Flex 3</div>
+        <div class="flex-item">Flex 4</div>
+      </div>
+
+      <h3>Grid - Layout Bidimensional</h3>
+      <div class="grid-demo">
+        <div class="grid-box header">Header</div>
+        <div class="grid-box sidebar">Sidebar</div>
+        <div class="grid-box main">Main Content</div>
+        <div class="grid-box widget-1">Widget 1</div>
+        <div class="grid-box widget-2">Widget 2</div>
+        <div class="grid-box footer">Footer</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // SPA Navigation
+    function showSection(sectionName) {
+      // Esconder todas as seções
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+
+      // Remover active de todos botões
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Mostrar seção selecionada
+      document.getElementById(sectionName + '-section').classList.add('active');
+
+      // Ativar botão correspondente
+      event.target.closest('.nav-btn').classList.add('active');
+    }
+  </script>
+</body>
+
+</html>
